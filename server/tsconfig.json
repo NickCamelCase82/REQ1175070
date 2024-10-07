@@ -1,0 +1,9 @@
+{
+  "compilerOptions": {
+    "allowJs": true,
+    "outDir": "./dist",
+    "checkJs": true
+  },
+  "include": ["index.ts", "./eslintrc.js"],
+  "exclude": ["node_modules"]
+}
