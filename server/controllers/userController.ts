@@ -8,14 +8,14 @@ class UserController {
     const e = 30; // Number of results per batch
     let hasMoreResults = true;
 
-    let results: { title: string; url: string }[] = [];
+    let results: { title: string; url: string; xml: string }[] = [];
 
     const { searchTerm } = req.body;
 
     while (hasMoreResults) {
       const url = `${baseUrl}?p=${searchTerm}&ancestor=complete&aspOrInd=aspect&q=CIVIX_DOCUMENT_ROOT_STEM%3A%28${searchTerm}%29&s=${s}&e=${
         s + e
-      }&nFrag=5&lFrag=100&xsl=%2Ftemplates%2FsearchResults.xsl`;
+      }&nFrag=5&lFrag=100& xsl=%2Ftemplates%2FsearchResults.xsl`;
 
       try {
         const response = await axios.get(url);
@@ -28,6 +28,7 @@ class UserController {
             results.push({
               title: doc.CIVIX_DOCUMENT_TITLE[0],
               url: `https://www.bclaws.gov.bc.ca/civix/document/id/complete/statreg/${doc.CIVIX_DOCUMENT_ID[0]}`,
+              xml: `https://www.bclaws.gov.bc.ca/civix/document/id/complete/statreg/${doc.CIVIX_DOCUMENT_ID[0]}/xml`,
             });
           });
           s += e; // Move to the next batch of results
@@ -39,6 +40,21 @@ class UserController {
       }
     }
     return res.json(results);
+  }
+
+  async fetchXml(req, res) {
+    const { url } = req.query;
+    try {
+      const response = await axios.get(url, {
+        headers: {
+          "User-Agent": "Mozilla/5.0",
+        },
+      });
+      res.set("Content-Type", response.headers["content-type"]);
+      res.send(response.data);
+    } catch (error) {
+      res.status(500).send({ error: "Failed to fetch data from BC Laws." });
+    }
   }
 }
 
