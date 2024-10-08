@@ -1,6 +1,6 @@
 const axios = require("axios");
 const xml2js = require("xml2js");
-const { Configuration, OpenAIApi } = require("openai");
+const { OpenAI } = require("openai");
 
 class UserController {
   async search(req, res) {
@@ -59,10 +59,9 @@ class UserController {
   }
 
   async fetchSummary(req, res) {
-    const configuration = new Configuration({
-      apiKey: process.env.OPENAI_API_KEY,
+    const openai = new OpenAI({
+      api_key: process.env.OPENAI_API_KEY,
     });
-    const openai = new OpenAIApi(configuration);
 
     const { text } = req.body;
 
