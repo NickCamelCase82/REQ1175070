@@ -77,7 +77,7 @@ class UserController {
         max_tokens: 150,
       });
 
-      res.json({ summary: response.data.choices[0].message.content });
+      res.json({ summary: response.choices[0].message.content });
     } catch (error) {
       console.error("Error fetching summary:", error);
       res.status(500).json({ error: "Error fetching summary" });
