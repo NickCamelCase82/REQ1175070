@@ -9,7 +9,7 @@ const corsConfig = {
   origin: [
     "http://localhost:3001",
     "https://www.bclaws.gov.bc.ca/*",
-    "https://NickCamelCase82.github.io/REQ1175070/*",
+    "https://nickcamelcase82.github.io/REQ1175070/*",
   ],
   methods: "GET, POST",
   credentials: true,
