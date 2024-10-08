@@ -6,7 +6,6 @@ import axios from "axios";
 import Pagination from "@mui/material/Pagination";
 import { CircularProgress } from "@mui/material";
 import SummaryModal from "./SummaryModal.tsx";
-import OpenAI from "openai";
 
 interface SearchResult {
   title: string;
@@ -14,24 +13,19 @@ interface SearchResult {
   xml: string;
 }
 
-const openai = new OpenAI({
-  apiKey: process.env.REACT_APP_OPENAI_API_KEY,
-  dangerouslyAllowBrowser: true,
-});
-
 const getOpenAISummary = async (text) => {
-  const response = await openai.chat.completions.create({
-    model: "gpt-4o-mini",
-    messages: [
+  try {
+    const response = await axios.post(
+      "https://req1175070.onrender.com/user/summary",
       {
-        role: "user",
-        content: `Can you provide a summary for the article with the following text: "${text}"?`,
-      },
-    ],
-    max_tokens: 150,
-  });
-
-  return response.choices[0].message.content;
+        text,
+      }
+    );
+    return response.data.summary;
+  } catch (error) {
+    console.error("Error fetching summary:", error);
+    throw error;
+  }
 };
 
 function SearchComponent() {

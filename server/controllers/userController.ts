@@ -1,5 +1,6 @@
 const axios = require("axios");
 const xml2js = require("xml2js");
+const { Configuration, OpenAIApi } = require("openai");
 
 class UserController {
   async search(req, res) {
@@ -54,6 +55,33 @@ class UserController {
       res.send(response.data);
     } catch (error) {
       res.status(500).send({ error: "Failed to fetch data from BC Laws." });
+    }
+  }
+
+  async fetchSummary(req, res) {
+    const configuration = new Configuration({
+      apiKey: process.env.OPENAI_API_KEY,
+    });
+    const openai = new OpenAIApi(configuration);
+
+    const { text } = req.body;
+
+    try {
+      const response = await openai.chat.completions.create({
+        model: "gpt-4o-mini",
+        messages: [
+          {
+            role: "user",
+            content: `Can you provide a summary for the article with the following text: "${text}"?`,
+          },
+        ],
+        max_tokens: 150,
+      });
+
+      res.json({ summary: response.data.choices[0].message.content });
+    } catch (error) {
+      console.error("Error fetching summary:", error);
+      res.status(500).json({ error: "Error fetching summary" });
     }
   }
 }
