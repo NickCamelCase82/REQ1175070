@@ -6,7 +6,11 @@ const userRouter = require("./routes/userRoutes");
 const PORT = process.env.PORT ?? 5000;
 
 const corsConfig = {
-  origin: ["http://localhost:3001", "https://www.bclaws.gov.bc.ca/*"],
+  origin: [
+    "http://localhost:3001",
+    "https://www.bclaws.gov.bc.ca/*",
+    "https://NickCamelCase82.io/REQ1175070/*",
+  ],
   methods: "GET, POST",
   credentials: true,
 };
