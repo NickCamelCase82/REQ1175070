@@ -2,6 +2,7 @@
   "name": "client",
   "version": "0.1.0",
   "private": true,
+  "homepage": "https://NickCamelCase82.io/REQ1175070",
   "dependencies": {
     "@craco/craco": "^7.1.0",
     "@emotion/react": "^11.13.3",
@@ -29,7 +30,9 @@
     "start": "craco start",
     "build": "craco build",
     "test": "craco test",
-    "eject": "craco eject"
+    "eject": "craco eject",
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d build"
   },
   "eslintConfig": {
     "extends": [
@@ -50,6 +53,7 @@
     ]
   },
   "devDependencies": {
+    "gh-pages": "^6.1.1",
     "typescript": "^4.9.5"
   }
 }
