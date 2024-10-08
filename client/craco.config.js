@@ -6,7 +6,7 @@ module.exports = {
       resolve: {
         fallback: {
           buffer: require.resolve("buffer/"),
-          timers: require.resolve("timers-browserify"), // Add this line
+          timers: require.resolve("timers-browserify"),
         },
       },
     },

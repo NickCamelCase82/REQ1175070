@@ -8,6 +8,12 @@ import { CircularProgress } from "@mui/material";
 import SummaryModal from "./SummaryModal.tsx";
 import OpenAI from "openai";
 
+interface SearchResult {
+  title: string;
+  url: string;
+  xml: string;
+}
+
 const openai = new OpenAI({
   apiKey: process.env.REACT_APP_OPENAI_API_KEY,
   dangerouslyAllowBrowser: true,
@@ -31,7 +37,7 @@ const getOpenAISummary = async (text) => {
 function SearchComponent() {
   const [searchTerm, setSearchTerm] = useState("");
   const [showResults, setShowResults] = useState(false);
-  const [results, setResults] = useState([]);
+  const [results, setResults] = useState<SearchResult[]>([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [summaries, setSummaries] = useState({});
   const [loading, setLoading] = useState(false);
@@ -51,6 +57,8 @@ function SearchComponent() {
       setCurrentPage(1);
       setSummaries({});
     } catch (error) {
+      setModalSummary("Error fetching data, please try again or call support.");
+      setOpenModal(true);
       console.error("Error fetching search results:", error);
     } finally {
       setLoading(false);
@@ -99,7 +107,7 @@ function SearchComponent() {
       if (combinedText) {
         const summary = await getOpenAISummary(combinedText);
         setSummaries((prev) => ({ ...prev, [index]: summary }));
-        setModalSummary(summary);
+        setModalSummary((summary as string) || "");
         setOpenModal(true);
       } else {
         setModalSummary(
@@ -108,6 +116,8 @@ function SearchComponent() {
         setOpenModal(true);
       }
     } catch (error) {
+      setModalSummary("Error fetching data, please try again or call support.");
+      setOpenModal(true);
       console.error("Error fetching data:", error);
     }
   };
@@ -186,17 +196,19 @@ function SearchComponent() {
                   </Button>
                 </li>
               ))
-            ) : (
+            ) : currentResults.length === 0 ? (
               <p>No results found.</p>
-            )}
+            ) : null}
           </ul>
 
-          <Pagination
-            count={Math.ceil(results.length / resultsPerPage)}
-            page={currentPage}
-            onChange={handlePageChange}
-            sx={{ mt: 4 }}
-          />
+          {currentResults.length > 0 ? (
+            <Pagination
+              count={Math.ceil(results.length / resultsPerPage)}
+              page={currentPage}
+              onChange={handlePageChange}
+              sx={{ mt: 4 }}
+            />
+          ) : null}
         </Box>
       )}
 

@@ -27,8 +27,8 @@ class UserController {
           documents.forEach((doc) => {
             results.push({
               title: doc.CIVIX_DOCUMENT_TITLE[0],
-              url: `https://www.bclaws.gov.bc.ca/civix/document/id/complete/statreg/${doc.CIVIX_DOCUMENT_ID[0]}`,
-              xml: `https://www.bclaws.gov.bc.ca/civix/document/id/complete/statreg/${doc.CIVIX_DOCUMENT_ID[0]}/xml`,
+              url: `https://www.bclaws.gov.bc.ca/civix/document/id/complete/statreg/${doc.CIVIX_DOCUMENT_ID[0]}`, // We need this to render document's name and redirect to it if needed
+              xml: `https://www.bclaws.gov.bc.ca/civix/document/id/complete/statreg/${doc.CIVIX_DOCUMENT_ID[0]}/xml`, // We need this to extract the text and serve it to OpenAI for a summary
             });
           });
           s += e; // Move to the next batch of results
@@ -47,7 +47,7 @@ class UserController {
     try {
       const response = await axios.get(url, {
         headers: {
-          "User-Agent": "Mozilla/5.0",
+          "User-Agent": "Mozilla/5.0", // Pretending to be a client side as BC Laws web-page is sometimes denying server-side calls
         },
       });
       res.set("Content-Type", response.headers["content-type"]);
