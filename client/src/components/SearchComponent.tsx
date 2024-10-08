@@ -49,9 +49,12 @@ function SearchComponent() {
     setLoading(true);
     event.preventDefault();
     try {
-      const response = await axios.post("http://localhost:3000/user", {
-        searchTerm,
-      });
+      const response = await axios.post(
+        "https://req1175070.onrender.com/user",
+        {
+          searchTerm,
+        }
+      );
       setResults(response.data);
       setShowResults(true);
       setCurrentPage(1);
@@ -95,7 +98,7 @@ function SearchComponent() {
   const handleSummaryClick = async (xml, index) => {
     try {
       const response = await axios.get(
-        "http://localhost:3000/user/proxy/bclaws",
+        "https://req1175070.onrender.com/user/proxy/bclaws",
         {
           params: { url: `${xml}` },
         }
